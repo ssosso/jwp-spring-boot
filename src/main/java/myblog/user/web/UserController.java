@@ -3,7 +3,7 @@ package myblog.user.web;
 import myblog.user.domain.User;
 import myblog.user.domain.UserRepository;
 import myblog.user.dto.UserCreatedDto;
-import myblog.user.dto.UserDto;
+import myblog.user.dto.UserUpdatedDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +28,20 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> show(@PathVariable int id) {
         return ResponseEntity.ok(UserRepository.findById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> update(@PathVariable int id, @RequestBody UserUpdatedDto userUpdatedDto) {
+        logger.debug("Updated User : {}", userUpdatedDto);
+        User user = UserRepository.update(id, userUpdatedDto);
+        return ResponseEntity.ok(UserRepository.findById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable int id) {
+        Boolean isDeleted = UserRepository.delete(id);
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 }
